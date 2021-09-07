@@ -113,7 +113,8 @@ public class CoffeeMakerTest {
 
 
 	/**
-	 * Given a coffee maker add recipe that is not valid, so it should throw the RecipeException.
+	 * Recipe is invalid, It must throw RecipeException.
+	 * @throws RecipeException if there was invalid recipe.
 	 */
 	@Test(expected = RecipeException.class)
 	public void testRecipeException() throws RecipeException {
