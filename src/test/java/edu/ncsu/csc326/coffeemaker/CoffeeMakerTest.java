@@ -18,7 +18,7 @@
  */
 package edu.ncsu.csc326.coffeemaker;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +43,7 @@ public class CoffeeMakerTest {
 	private Recipe recipe2;
 	private Recipe recipe3;
 	private Recipe recipe4;
+	private Recipe recipe5;
 
 	/**
 	 * Initializes some recipes to test with and the {@link CoffeeMaker} 
@@ -90,8 +91,40 @@ public class CoffeeMakerTest {
 		recipe4.setAmtMilk("1");
 		recipe4.setAmtSugar("1");
 		recipe4.setPrice("65");
+
+		//Set up for r5
+		recipe5 = new Recipe();
+		recipe5.setName("Hot Milk");
+		recipe5.setAmtChocolate("0");
+		recipe5.setAmtCoffee("0");
+		recipe5.setAmtMilk("4");
+		recipe5.setAmtSugar("1");
+		recipe5.setPrice("45");
+
+		//Set up for r5
+		recipe5 = new Recipe();
+		recipe5.setName("Hot Drinking Water");
+		recipe5.setAmtChocolate("0");
+		recipe5.setAmtCoffee("0");
+		recipe5.setAmtMilk("0");
+		recipe5.setAmtSugar("0");
+		recipe5.setPrice("120"); // Look like a price in airport. LoL
 	}
-	
+
+
+	/**
+	 * Given a coffee maker add recipe that is not valid, so it should throw the RecipeException.
+	 */
+	@Test(expected = RecipeException.class)
+	public void testRecipeException() throws RecipeException {
+		recipe5 = new Recipe();
+		recipe5.setName("seieki");
+		recipe5.setAmtChocolate("-12");
+		recipe5.setAmtCoffee("-12");
+		recipe5.setAmtMilk("-12");
+		recipe5.setAmtSugar("-12");
+		recipe5.setPrice("-1500");
+	}
 	
 	/**
 	 * Given a coffee maker with the default inventory
@@ -131,5 +164,81 @@ public class CoffeeMakerTest {
 		coffeeMaker.addRecipe(recipe1);
 		assertEquals(25, coffeeMaker.makeCoffee(0, 75));
 	}
+
+	/**
+	 * There are 4 valid coffee recipes.
+	 * The CoffeeMaker must not be able to add if they are already 3 recipes.
+	 */
+	@Test
+	public void testAddRecipe() {
+		coffeeMaker.addRecipe(recipe4);
+		coffeeMaker.addRecipe(recipe2);
+		coffeeMaker.addRecipe(recipe1);
+		assertFalse(coffeeMaker.addRecipe(recipe3));
+	}
+
+	/**
+	 * There are 4 valid coffee recipes.
+	 * The CoffeeMaker must not add if they are already 3 recipes.
+	 *
+	 */
+	@Test
+	public void testExceededAddRecipe() {
+		coffeeMaker.addRecipe(recipe4);
+		coffeeMaker.addRecipe(recipe2);
+		coffeeMaker.addRecipe(recipe1);
+		assertFalse(coffeeMaker.addRecipe(recipe3));
+	}
+
+	/**
+	 * There are recipes.
+	 * CoffeeMaker must not add duplicate recipes.
+	 */
+	@Test
+	public void testDuplicatedAddRecipe() {
+		coffeeMaker.addRecipe(recipe4);
+		coffeeMaker.addRecipe(recipe1);
+		assertFalse(coffeeMaker.addRecipe(recipe4));
+		assertFalse(coffeeMaker.addRecipe(recipe1));
+	}
+
+	/**
+	 * Test recipe replacement(edit) in CoffeeMaker.
+	 */
+	@Test
+	public void testEditRecipe() {
+		coffeeMaker.addRecipe(recipe1);
+		coffeeMaker.editRecipe(0, recipe5);
+		assertEquals(recipe5.getName(), coffeeMaker.getRecipes()[0].getName());
+	}
+
+	/**
+	 * DNE editing must give null and no error.
+	 */
+	@Test
+	public void testEditDoesNotExistRecipe() {
+		assertNull(coffeeMaker.editRecipe(0, recipe5));
+	}
+
+	/**
+	 * The recipe must be a null after being deleted or does not exist.
+	 */
+	@Test
+	public void testDeleteRecipe() {
+		assertNull(coffeeMaker.getRecipes()[0]); // DNE since nothing added
+		coffeeMaker.addRecipe(recipe1);
+		coffeeMaker.deleteRecipe(0);
+		assertNull(coffeeMaker.getRecipes()[0]); // DNE cause of deletion
+	}
+
+	/**
+	 * DNE deletion must give null and no error.
+	 */
+	@Test
+	public void testDeleteDoesNotExistRecipe() {
+		assertNull(coffeeMaker.deleteRecipe(2));
+	}
+
+
 
 }
