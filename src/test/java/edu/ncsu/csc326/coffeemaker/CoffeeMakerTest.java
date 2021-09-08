@@ -44,6 +44,7 @@ public class CoffeeMakerTest {
     private Recipe recipe3;
     private Recipe recipe4;
     private Recipe recipe5;
+    private Recipe recipe39;
 
     /**
      * Initializes some recipes to test with and the {@link CoffeeMaker}
@@ -109,6 +110,15 @@ public class CoffeeMakerTest {
         recipe5.setAmtMilk("0");
         recipe5.setAmtSugar("0");
         recipe5.setPrice("120"); // Look like a price in airport. LoL
+
+        //Set up for r5
+        recipe39 = new Recipe(); // 3(mi)9(ku)
+        recipe39.setName("Hatsune Miku"); // Vocaloid!
+        recipe39.setAmtChocolate("39"); // Much wow!
+        recipe39.setAmtCoffee("39"); // Able to sleep?
+        recipe39.setAmtMilk("39"); // Good calcium bro!
+        recipe39.setAmtSugar("39"); // Asking for diabetes?
+        recipe39.setPrice("39"); // Nice price at all. XD
     }
 
 
@@ -406,6 +416,35 @@ public class CoffeeMakerTest {
     @Test()
     public void testAddZeroInventory() throws InventoryException {
         coffeeMaker.addInventory("0", "0", "0", "0");
+    }
+
+    /**
+     * Cannot making a coffer since the ingredients are not enough.
+     * Therefore, return a change instead.
+     */
+    @Test()
+    public void testNotEnoughIngredient() {
+        coffeeMaker.addRecipe(recipe39);
+        assertEquals(39, coffeeMaker.makeCoffee(0, 39));
+    }
+
+    /**
+     * We are going to purchase a null recipe
+     * Therefore, return a change instead.
+     */
+    @Test()
+    public void testPurchaseNullRecipe() {
+        assertEquals(1200, coffeeMaker.makeCoffee(0, 1200));
+    }
+
+    /**
+     * We are going to purchase a null recipe
+     * Therefore, return a change instead.
+     */
+    @Test()
+    public void testPurchaseNotEnoughMoney() {
+        coffeeMaker.addRecipe(recipe5);
+        assertEquals(39, coffeeMaker.makeCoffee(0, 39));
     }
 
 }
