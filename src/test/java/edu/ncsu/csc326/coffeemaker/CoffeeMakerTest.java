@@ -168,15 +168,29 @@ public class CoffeeMakerTest {
     }
 
     /**
+     * With default inventory given,
+     * We are going to make a coffee with 120 paid,
+     * And inventory must have been used correctly.
+     */
+    @Test
+    public void testCutDownInventoryToMakeCoffee() {
+        coffeeMaker.addRecipe(recipe1);
+        coffeeMaker.makeCoffee(0, 120);
+        assertEquals("Coffee: 12\nMilk: 14\nSugar: 14\nChocolate: 15\n", coffeeMaker.checkInventory());
+    }
+
+    /**
      * There are 4 valid coffee recipes.
      * The CoffeeMaker must not be able to add if they are already 3 recipes.
      */
     @Test
-    public void testAddRecipe() {
+    public void testNotToAddMoreRecipe() {
         coffeeMaker.addRecipe(recipe4);
         coffeeMaker.addRecipe(recipe2);
         coffeeMaker.addRecipe(recipe1);
-        assertFalse(coffeeMaker.addRecipe(recipe3));
+        coffeeMaker.addRecipe(recipe5);
+        coffeeMaker.addRecipe(recipe3);
+        assertEquals(3, coffeeMaker.getRecipes().length);
     }
 
     /**
@@ -381,6 +395,17 @@ public class CoffeeMakerTest {
     public void testAddInvalidSugar() throws InventoryException {
         String amtSugar = "ima ni ore wa muramura shiteru yo";
         coffeeMaker.addInventory("0", "0", amtSugar, "0");
+    }
+
+    /**
+     * Add valid(0) for all inventories must not throw exceptions.
+     *
+     * @throws InventoryException if there was an error parsing the quanity
+     *                            to a positive integer.
+     */
+    @Test()
+    public void testAddZeroInventory() throws InventoryException {
+        coffeeMaker.addInventory("0", "0", "0", "0");
     }
 
 }
