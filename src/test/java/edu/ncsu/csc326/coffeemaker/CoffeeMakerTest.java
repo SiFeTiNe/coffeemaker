@@ -180,7 +180,7 @@ public class CoffeeMakerTest {
     }
 
     /**
-     * There are 4 valid coffee recipes.
+     * There are 5 valid coffee recipes.
      * The CoffeeMaker must not be able to add if they are already 3 recipes.
      */
     @Test
@@ -194,7 +194,7 @@ public class CoffeeMakerTest {
     }
 
     /**
-     * There are 4 valid coffee recipes.
+     * There are 5 valid coffee recipes.
      * The CoffeeMaker must not add if they are already 3 recipes.
      */
     @Test
