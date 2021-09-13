@@ -19,6 +19,7 @@
 package edu.ncsu.csc326.coffeemaker;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,8 @@ public class CoffeeMakerTest {
     private Recipe recipe4;
     private Recipe recipe5;
     private Recipe recipe39;
+    private RecipeBook stubRecipeBook;
+    private CoffeeMaker coffeeMakerX;
 
     /**
      * Initializes some recipes to test with and the {@link CoffeeMaker}
@@ -119,6 +122,10 @@ public class CoffeeMakerTest {
         recipe39.setAmtMilk("39"); // Good calcium bro!
         recipe39.setAmtSugar("39"); // Asking for diabetes?
         recipe39.setPrice("39"); // Nice price at all. XD
+
+        Inventory inventory = new Inventory();
+        stubRecipeBook = mock(RecipeBook.class);
+        coffeeMakerX = new CoffeeMaker(stubRecipeBook, inventory);
     }
 
 
@@ -173,8 +180,10 @@ public class CoffeeMakerTest {
      */
     @Test
     public void testMakeCoffee() {
-        coffeeMaker.addRecipe(recipe1);
-        assertEquals(25, coffeeMaker.makeCoffee(0, 75));
+        Recipe[] recipeArray = new Recipe[]{recipe1};
+        when(stubRecipeBook.getRecipes()).thenReturn(recipeArray);
+        assertEquals(25, coffeeMakerX.makeCoffee(0, 75));
+        verify(stubRecipeBook, times(4)).getRecipes();
     }
 
     /**
@@ -184,9 +193,11 @@ public class CoffeeMakerTest {
      */
     @Test
     public void testCutDownInventoryToMakeCoffee() {
-        coffeeMaker.addRecipe(recipe1);
-        coffeeMaker.makeCoffee(0, 120);
-        assertEquals("Coffee: 12\nMilk: 14\nSugar: 14\nChocolate: 15\n", coffeeMaker.checkInventory());
+        Recipe[] recipeArray = new Recipe[]{recipe1};
+        when(stubRecipeBook.getRecipes()).thenReturn(recipeArray);
+        coffeeMakerX.makeCoffee(0, 120);
+        verify(stubRecipeBook, times(4)).getRecipes();
+        assertEquals("Coffee: 12\nMilk: 14\nSugar: 14\nChocolate: 15\n", coffeeMakerX.checkInventory());
     }
 
     /**
@@ -424,8 +435,10 @@ public class CoffeeMakerTest {
      */
     @Test()
     public void testNotEnoughIngredient() {
-        coffeeMaker.addRecipe(recipe39);
-        assertEquals(39, coffeeMaker.makeCoffee(0, 39));
+        Recipe[] recipeArray = new Recipe[]{recipe39};
+        when(stubRecipeBook.getRecipes()).thenReturn(recipeArray);
+        assertEquals(39, coffeeMakerX.makeCoffee(0, 39));
+        verify(stubRecipeBook, times(3)).getRecipes();
     }
 
     /**
@@ -434,7 +447,10 @@ public class CoffeeMakerTest {
      */
     @Test()
     public void testPurchaseNullRecipe() {
-        assertEquals(1200, coffeeMaker.makeCoffee(0, 1200));
+        Recipe[] recipeArray = new Recipe[3];
+        when(stubRecipeBook.getRecipes()).thenReturn(recipeArray);
+        assertEquals(1200, coffeeMakerX.makeCoffee(0, 1200));
+        verify(stubRecipeBook, times(1)).getRecipes();
     }
 
     /**
@@ -443,8 +459,10 @@ public class CoffeeMakerTest {
      */
     @Test()
     public void testPurchaseNotEnoughMoney() {
-        coffeeMaker.addRecipe(recipe5);
-        assertEquals(39, coffeeMaker.makeCoffee(0, 39));
+        Recipe[] recipeArray = new Recipe[]{recipe5};
+        when(stubRecipeBook.getRecipes()).thenReturn(recipeArray);
+        assertEquals(39, coffeeMakerX.makeCoffee(0, 39));
+        verify(stubRecipeBook, times(2)).getRecipes();
     }
 
 }
