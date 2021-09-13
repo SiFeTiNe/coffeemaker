@@ -49,6 +49,31 @@ public class CoffeeMakerTest {
     private RecipeBook stubRecipeBook;
     private CoffeeMaker coffeeMakerX;
 
+
+    /**
+     * Create a recipe with given parameters.
+     *
+     * @param name         is the recipe's name
+     * @param amtChocolate is amount of Chocolate
+     * @param amtCoffee    is amount of Coffee
+     * @param amtMilk      is amount of Milk
+     * @param amtSugar     is amount of Sugar
+     * @param price        is a price of the recipe
+     * @return a recipe.
+     * @throws RecipeException if there was an error parsing the ingredient
+     *                         amount when setting up the recipe.
+     */
+    private static Recipe createRecipe(String name, String amtChocolate, String amtCoffee, String amtMilk, String amtSugar, String price) throws RecipeException {
+        Recipe recipe = new Recipe();
+        recipe.setName(name);
+        recipe.setAmtChocolate(amtChocolate);
+        recipe.setAmtCoffee(amtCoffee);
+        recipe.setAmtMilk(amtMilk);
+        recipe.setAmtSugar(amtSugar);
+        recipe.setPrice(price);
+        return recipe;
+    }
+
     /**
      * Initializes some recipes to test with and the {@link CoffeeMaker}
      * object we wish to test.
@@ -61,67 +86,24 @@ public class CoffeeMakerTest {
         coffeeMaker = new CoffeeMaker();
 
         //Set up for r1
-        recipe1 = new Recipe();
-        recipe1.setName("Coffee");
-        recipe1.setAmtChocolate("0");
-        recipe1.setAmtCoffee("3");
-        recipe1.setAmtMilk("1");
-        recipe1.setAmtSugar("1");
-        recipe1.setPrice("50");
+
+        recipe1 = createRecipe("Coffee", "0", "3", "1", "1", "50");
 
         //Set up for r2
-        recipe2 = new Recipe();
-        recipe2.setName("Mocha");
-        recipe2.setAmtChocolate("20");
-        recipe2.setAmtCoffee("3");
-        recipe2.setAmtMilk("1");
-        recipe2.setAmtSugar("1");
-        recipe2.setPrice("75");
+        recipe2 = createRecipe("Mocha", "20", "3", "1", "1", "75");
 
         //Set up for r3
-        recipe3 = new Recipe();
-        recipe3.setName("Latte");
-        recipe3.setAmtChocolate("0");
-        recipe3.setAmtCoffee("3");
-        recipe3.setAmtMilk("3");
-        recipe3.setAmtSugar("1");
-        recipe3.setPrice("100");
+        recipe3 = createRecipe("Latte", "0", "3", "3", "1", "100");
 
         //Set up for r4
-        recipe4 = new Recipe();
-        recipe4.setName("Hot Chocolate");
-        recipe4.setAmtChocolate("4");
-        recipe4.setAmtCoffee("0");
-        recipe4.setAmtMilk("1");
-        recipe4.setAmtSugar("1");
-        recipe4.setPrice("65");
+        recipe4 = createRecipe("Hot Chocolate", "4", "0", "1", "1", "65");
 
         //Set up for r5
-        recipe5 = new Recipe();
-        recipe5.setName("Hot Milk");
-        recipe5.setAmtChocolate("0");
-        recipe5.setAmtCoffee("0");
-        recipe5.setAmtMilk("4");
-        recipe5.setAmtSugar("1");
-        recipe5.setPrice("45");
+        recipe5 = createRecipe("Hot Drinking Water", "0", "0", "0", "0", "120");
+        // Look like a price in airport. LoL
 
-        //Set up for r5
-        recipe5 = new Recipe();
-        recipe5.setName("Hot Drinking Water");
-        recipe5.setAmtChocolate("0");
-        recipe5.setAmtCoffee("0");
-        recipe5.setAmtMilk("0");
-        recipe5.setAmtSugar("0");
-        recipe5.setPrice("120"); // Look like a price in airport. LoL
-
-        //Set up for r5
-        recipe39 = new Recipe(); // 3(mi)9(ku)
-        recipe39.setName("Hatsune Miku"); // Vocaloid!
-        recipe39.setAmtChocolate("39"); // Much wow!
-        recipe39.setAmtCoffee("39"); // Able to sleep?
-        recipe39.setAmtMilk("39"); // Good calcium bro!
-        recipe39.setAmtSugar("39"); // Asking for diabetes?
-        recipe39.setPrice("39"); // Nice price at all. XD
+        //Set up for r39
+        recipe39 = createRecipe("Hatsune Miku", "39", "39", "39", "39", "39");
 
         Inventory inventory = new Inventory();
         stubRecipeBook = mock(RecipeBook.class);
@@ -136,7 +118,7 @@ public class CoffeeMakerTest {
      */
     @Test(expected = RecipeException.class)
     public void testRecipeException() throws RecipeException {
-        recipe5 = new Recipe();
+        Recipe recipe5 = new Recipe();
         recipe5.setName("seieki");
         recipe5.setAmtChocolate("-12");
         recipe5.setAmtCoffee("-12");
