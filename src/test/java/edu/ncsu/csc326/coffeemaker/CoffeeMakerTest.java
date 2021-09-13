@@ -436,7 +436,7 @@ public class CoffeeMakerTest {
     }
 
     /**
-     * We are going to purchase a null recipe
+     * We are going to purchase with not enough money
      * Therefore, return a change instead.
      */
     @Test()
