@@ -25,13 +25,31 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'edu.ncsu.csc326.coffeemaker', 'src/test/resources']
+        }
+    }
+}
+
 dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.mockito:mockito-core:3.+"
-
     // Deprecated.  Use testImplementation.
-//    testCompile 'junit:junit:4.13.2'
+    // testCompile 'junit:junit:4.13.2'
+    testImplementation 'io.cucumber:cucumber-java:6.10.4'
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
 }
 
 test {
